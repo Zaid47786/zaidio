@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,10 +7,10 @@
   <meta name="keywords" content="Zaid Ahmad, student developer, web development, AI, cybersecurity, product builder, content creator">
   <meta name="author" content="Zaid Ahmad">
   <meta name="theme-color" content="#07100d">
-  <meta property="og:title" content="Zaid Ahmad — Student Developer & Builder">
+  <meta property="og:title" content="Zaid Ahmad — Student Developer &amp; Builder">
   <meta property="og:description" content="A student developer and curious builder exploring web products, AI, cybersecurity, and meaningful content.">
   <meta property="og:image" content="ME.png.jpg">
-  <title>Zaid Ahmad — Student Developer & Builder</title>
+  <title>Zaid Ahmad — Student Developer &amp; Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <video class="video-bg" autoplay muted loop playsinline preload="metadata" poster="back.jpg" aria-hidden="true">
+  <video class="video-bg" muted loop playsinline preload="metadata" poster="back.jpg" aria-hidden="true">
     <source src="vid.mp4" type="video/mp4">
   </video>
   <canvas id="code-rain" class="code-rain" aria-hidden="true"></canvas>
@@ -32,7 +32,7 @@
         <span class="brand-mark">ZA</span>
         <span class="brand-copy"><strong>ZAID AHMAD</strong><small>student builder / 2026</small></span>
       </a>
-      <div class="availability" aria-label="Current availability">
+      <div class="availability">
         <span class="status-dot" aria-hidden="true"></span>
         <span>OPEN TO BUILD</span>
       </div>
@@ -43,7 +43,7 @@
         <p class="eyebrow"><span>01</span> student developer <i aria-hidden="true">/</i> curious builder</p>
         <h1 id="hero-title">Build what<br><span>doesn’t exist yet.</span></h1>
         <p class="hero-intro">I’m Zaid — a student, developer, creator, and curious builder from India. I learn by turning questions into websites, products, experiments, and stories people can actually use.</p>
-        <div class="hero-actions" aria-label="Primary actions">
+        <div class="hero-actions" role="group" aria-label="Primary actions">
           <a class="button button-primary" href="https://t.me/MrBaiGun" target="_blank" rel="noopener noreferrer">
             <span>Start a conversation</span><span aria-hidden="true">↗</span>
           </a>
@@ -51,7 +51,7 @@
             <span>See what I’m exploring</span><span aria-hidden="true">↓</span>
           </a>
         </div>
-        <div class="hero-meta" aria-label="Profile summary">
+        <div class="hero-meta" role="group" aria-label="Profile summary">
           <span><b>01</b> independent builder</span>
           <span><b>04</b> active directions</span>
           <span><b>∞</b> room to learn</span>
@@ -121,7 +121,7 @@
         <article class="focus-card">
           <div class="card-topline"><span class="card-number">04</span><span class="card-tag">CREATE</span></div>
           <div class="card-icon" aria-hidden="true">◌</div>
-          <h3>Content & stories</h3>
+          <h3>Content &amp; stories</h3>
           <p>Exploring philosophy, psychology, human behaviour, and ambition through short-form concepts, scripts, and visual ideas.</p>
           <div class="tag-list"><span>WRITING</span><span>STORYTELLING</span></div>
         </article>
@@ -179,6 +179,8 @@
   <script>
     document.body.classList.add('intro');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const backgroundVideo = document.querySelector('.video-bg');
+    if (backgroundVideo && !reduceMotion.matches) backgroundVideo.play().catch(() => {});
     window.setTimeout(() => document.body.classList.remove('intro'), reduceMotion.matches ? 80 : 1600);
 
     (function setupCodeRain() {
