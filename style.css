@@ -29,6 +29,7 @@ body {
   overflow-x: hidden;
   overflow-wrap: anywhere;
 }
+[data-category] { scroll-margin-top: 92px; }
 body::before {
   content: '';
   position: fixed;
@@ -94,6 +95,13 @@ body.intro::before, body.intro::after { opacity: 0; }
 .availability, .eyebrow, .signal-key, .card-tag, .caption-label, .hero-meta, .tag-list, .site-footer, .social-link small, .product-index, .product-status { font-family: var(--mono); }
 .availability { display: flex; flex: 0 0 auto; align-items: center; gap: 9px; color: var(--muted-strong); font-size: 0.68rem; letter-spacing: 0.1em; }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px var(--green-soft), 0 0 14px var(--green); }
+.category-nav { position: sticky; top: 14px; z-index: 10; display: flex; gap: 4px; width: 100%; margin: 0 0 24px; padding: 6px; overflow-x: auto; border: 1px solid var(--line); background: rgba(5, 14, 9, 0.78); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2); backdrop-filter: blur(16px) saturate(130%); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.category-nav::-webkit-scrollbar { display: none; }
+.category-link { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; padding: 9px 11px; color: var(--muted); font: 0.6rem var(--mono); letter-spacing: 0.08em; text-decoration: none; transition: color 180ms var(--ease-out), background 180ms var(--ease-out), transform 180ms var(--ease-out); }
+.category-link span { color: var(--red); font-size: 0.54rem; }
+.category-link:hover { color: var(--ink); background: rgba(116, 255, 179, 0.08); transform: translateY(-1px); }
+.category-link.is-active { color: var(--bg); background: var(--green); }
+.category-link.is-active span { color: var(--bg); }
 
 .hero { display: grid; grid-template-columns: minmax(0, 1.16fr) minmax(270px, 0.84fr); align-items: center; gap: clamp(42px, 8vw, 112px); padding: 32px 0 82px; }
 .hero-copy { max-width: 680px; min-width: 0; }
@@ -211,6 +219,7 @@ blockquote { margin: 0; padding: 22px 0 22px 25px; border-left: 2px solid var(--
 @media (max-width: 760px) {
   .site-shell { width: min(100% - 34px, 620px); padding-top: 18px; }
   .topbar { padding-bottom: 34px; }
+  .category-nav { top: 10px; }
   .hero { grid-template-columns: 1fr; gap: 54px; padding: 25px 0 65px; }
   .hero-copy { max-width: none; }
   .portrait-card { justify-self: start; width: min(100%, 340px); }
@@ -234,15 +243,18 @@ blockquote { margin: 0; padding: 22px 0 22px 25px; border-left: 2px solid var(--
   .topbar { align-items: flex-start; }
   .availability { padding-top: 7px; font-size: 0.56rem; text-align: right; }
   .brand-copy small { display: none; }
+  .category-nav { top: 7px; margin-bottom: 17px; padding: 5px; }
+  .category-link { padding: 8px 9px; font-size: 0.55rem; }
   h1 { font-size: clamp(3.2rem, 17vw, 5rem); }
   h2 { font-size: clamp(2.6rem, 13vw, 4rem); }
   .hero-intro { font-size: 0.96rem; }
   .hero-actions { display: grid; }
   .button { width: 100%; min-width: 0; }
   .hero-meta { display: grid; gap: 10px; }
-  .portrait-card { width: min(100%, 300px); }
+  .portrait-card { justify-self: center; width: min(42vw, 176px); }
+  .portrait-frame { padding: 8px; box-shadow: 10px 10px 0 rgba(116, 255, 179, 0.06), 0 18px 42px rgba(0, 0, 0, 0.32); }
   .portrait-caption { display: grid; gap: 4px; }
-  .portrait-caption strong { text-align: left; }
+  .portrait-caption strong { font-size: 0.54rem; text-align: left; }
   .about-copy p, .creator-section > div:last-child > p:last-child { font-size: 0.94rem; }
   blockquote { padding-left: 18px; font-size: 1.12rem; }
   .focus-card, .product-card { padding: 18px; }
@@ -255,9 +267,11 @@ blockquote { margin: 0; padding: 22px 0 22px 25px; border-left: 2px solid var(--
   .site-shell { width: min(100% - 22px, 330px); }
   .brand-copy strong { font-size: 0.68rem; }
   .availability { font-size: 0.49rem; }
+  .category-link { gap: 5px; padding-inline: 8px; font-size: 0.51rem; }
   h1 { font-size: clamp(2.85rem, 16vw, 4rem); }
   h2 { font-size: clamp(2.35rem, 13vw, 3.4rem); }
   .eyebrow { font-size: 0.58rem; letter-spacing: 0.08em; }
+  .portrait-card { width: 148px; }
 }
 
 @media (hover: none) {

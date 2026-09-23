@@ -38,7 +38,16 @@
       </div>
     </header>
 
-    <section id="top" class="hero reveal" aria-labelledby="hero-title">
+    <nav class="category-nav reveal" aria-label="Portfolio categories">
+      <a class="category-link is-active" href="#top" data-target="top" aria-current="page"><span>01</span> PROFILE</a>
+      <a class="category-link" href="#about" data-target="about"><span>02</span> ABOUT</a>
+      <a class="category-link" href="#capabilities" data-target="capabilities"><span>03</span> CAPABILITIES</a>
+      <a class="category-link" href="#products" data-target="products"><span>04</span> PRODUCTS</a>
+      <a class="category-link" href="#creative" data-target="creative"><span>05</span> CREATIVE</a>
+      <a class="category-link" href="#contact" data-target="contact"><span>06</span> CONTACT</a>
+    </nav>
+
+    <section id="top" data-category class="hero reveal" aria-labelledby="hero-title">
       <div class="hero-copy">
         <p class="eyebrow"><span>01</span> student developer <i aria-hidden="true">/</i> curious builder</p>
         <h1 id="hero-title">Build what<br><span>doesn’t exist yet.</span></h1>
@@ -47,7 +56,7 @@
           <a class="button button-primary" href="https://t.me/MrBaiGun" target="_blank" rel="noopener noreferrer">
             <span>Start a conversation</span><span aria-hidden="true">↗</span>
           </a>
-          <a class="button button-ghost" href="#work">
+          <a class="button button-ghost" href="#capabilities">
             <span>See what I’m exploring</span><span aria-hidden="true">↓</span>
           </a>
         </div>
@@ -77,7 +86,7 @@
       <div class="signal-item"><span class="signal-key">WORKING TOWARD</span><strong class="signal-live">USEFUL DIGITAL PRODUCTS</strong></div>
     </section>
 
-    <section class="about-section reveal" aria-labelledby="about-title">
+    <section id="about" data-category class="about-section reveal" aria-labelledby="about-title">
       <div class="section-heading about-heading">
         <p class="eyebrow"><span>02</span> the short version</p>
         <h2 id="about-title">Curiosity turns<br>into <em>action.</em></h2>
@@ -91,7 +100,7 @@
       </div>
     </section>
 
-    <section id="work" class="content-section reveal" aria-labelledby="focus-title">
+    <section id="capabilities" data-category class="content-section reveal" aria-labelledby="focus-title">
       <div class="section-heading">
         <p class="eyebrow"><span>03</span> what I’m exploring</p>
         <h2 id="focus-title">A practical mix of<br><em>craft and curiosity.</em></h2>
@@ -128,7 +137,7 @@
       </div>
     </section>
 
-    <section class="product-section reveal" aria-labelledby="product-title">
+    <section id="products" data-category class="product-section reveal" aria-labelledby="product-title">
       <div class="section-heading">
         <p class="eyebrow"><span>04</span> ideas becoming products</p>
         <h2 id="product-title">Build for people,<br><em>not feature lists.</em></h2>
@@ -141,7 +150,7 @@
       <p class="product-note"><span aria-hidden="true">↳</span> The goal is not to add the most features. It is to understand what people actually need.</p>
     </section>
 
-    <section class="creator-section reveal" aria-labelledby="creator-title">
+    <section id="creative" data-category class="creator-section reveal" aria-labelledby="creator-title">
       <div class="creator-mark" aria-hidden="true">✳</div>
       <div>
         <p class="eyebrow"><span>05</span> beyond the code</p>
@@ -150,7 +159,7 @@
       </div>
     </section>
 
-    <section class="connect-panel reveal" aria-labelledby="connect-title">
+    <section id="contact" data-category class="connect-panel reveal" aria-labelledby="connect-title">
       <div>
         <p class="eyebrow"><span>06</span> find me online</p>
         <h2 id="connect-title">Still at the beginning.<br><em>Still building.</em></h2>
@@ -247,6 +256,30 @@
         });
       }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
       elements.forEach((element) => observer.observe(element));
+    }());
+
+    (function setupCategoryNavigation() {
+      const links = Array.from(document.querySelectorAll('.category-link'));
+      const sections = Array.from(document.querySelectorAll('[data-category]'));
+      if (!links.length || !sections.length) return;
+
+      function setActive(id, center = false) {
+        links.forEach((link) => {
+          const active = link.dataset.target === id;
+          link.classList.toggle('is-active', active);
+          if (active) link.setAttribute('aria-current', 'page');
+          else link.removeAttribute('aria-current');
+          if (active && center) link.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+        });
+      }
+
+      links.forEach((link) => link.addEventListener('click', () => setActive(link.dataset.target, true)));
+      if (!('IntersectionObserver' in window)) return;
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, 0.12, 0.4] });
+      sections.forEach((section) => observer.observe(section));
     }());
 
     document.addEventListener('click', (event) => {
