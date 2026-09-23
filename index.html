@@ -134,9 +134,41 @@
       </div>
     </section>
 
+    <section class="console-section reveal" aria-labelledby="console-title">
+      <div class="section-heading compact-heading">
+        <p class="eyebrow"><span>04</span> interactive profile</p>
+        <h2 id="console-title">Choose a mode.<br><em>See the signal.</em></h2>
+      </div>
+      <div class="builder-console">
+        <div class="console-window" aria-live="polite">
+          <div class="console-bar">
+            <span class="console-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span>ZAID_OS / BUILDER-CONSOLE</span>
+            <span class="console-live"><b></b> LIVE</span>
+          </div>
+          <div class="console-body">
+            <div class="console-path">visitor@zaid:~$ <span id="console-command">select --mode web</span></div>
+            <div id="console-output" class="console-output" role="tabpanel" tabindex="0">
+              <p><span class="console-key">FOCUS</span> clear interfaces + useful flows</p>
+              <p><span class="console-key">TOOLS</span> HTML / CSS / JavaScript / React</p>
+              <p><span class="console-key">NEXT</span> ship something someone can use</p>
+            </div>
+            <div class="console-cursor" aria-hidden="true">_</div>
+          </div>
+        </div>
+        <div class="mode-switcher" role="tablist" aria-label="Choose a profile mode">
+          <button class="mode-button is-active" type="button" role="tab" aria-selected="true" aria-controls="console-output" data-mode="web"><span>01</span> WEB</button>
+          <button class="mode-button" type="button" role="tab" aria-selected="false" aria-controls="console-output" data-mode="ai"><span>02</span> AI</button>
+          <button class="mode-button" type="button" role="tab" aria-selected="false" aria-controls="console-output" data-mode="security"><span>03</span> SECURITY</button>
+          <button class="mode-button" type="button" role="tab" aria-selected="false" aria-controls="console-output" data-mode="creator"><span>04</span> CREATOR</button>
+        </div>
+      </div>
+      <p class="console-note">Tap a mode to inspect what is currently running in the background.</p>
+    </section>
+
     <section class="ideas-section reveal" aria-labelledby="ideas-title">
       <div class="section-heading compact-heading">
-        <p class="eyebrow"><span>04</span> ideas in motion</p>
+        <p class="eyebrow"><span>05</span> ideas in motion</p>
         <h2 id="ideas-title">From thought<br>to <em>prototype.</em></h2>
       </div>
       <div class="ideas-grid">
@@ -149,7 +181,7 @@
 
     <section class="creator-section reveal" aria-labelledby="creator-title">
       <div class="creator-copy">
-        <p class="eyebrow"><span>05</span> beyond the code</p>
+        <p class="eyebrow"><span>06</span> beyond the code</p>
         <h2 id="creator-title">Make every minute<br><em>worth keeping.</em></h2>
         <p>I’m also interested in philosophy, psychology, human behaviour, ambition, perfectionism, and the struggles people experience every day. I like turning complicated ideas into simple, relatable stories.</p>
         <p>That curiosity shows up in short-form video concepts, scripts, visual ideas, voiceovers, and production strategies.</p>
@@ -163,7 +195,7 @@
 
     <section class="connect-panel reveal" aria-labelledby="connect-title">
       <div>
-        <p class="eyebrow"><span>06</span> find me online</p>
+        <p class="eyebrow"><span>07</span> find me online</p>
         <h2 id="connect-title">Let’s make something<br><em>worth opening.</em></h2>
       </div>
       <nav class="social-grid" aria-label="Social links">
@@ -236,6 +268,52 @@
       resize();
       window.addEventListener('resize', resize, { passive: true });
       window.requestAnimationFrame(draw);
+    }());
+
+    (function setupBuilderConsole() {
+      const command = document.getElementById('console-command');
+      const output = document.getElementById('console-output');
+      const buttons = Array.from(document.querySelectorAll('.mode-button'));
+      if (!command || !output || !buttons.length) return;
+
+      const modes = {
+        web: {
+          command: 'select --mode web',
+          rows: [['FOCUS', 'clear interfaces + useful flows'], ['TOOLS', 'HTML / CSS / JavaScript / React'], ['NEXT', 'ship something someone can use']]
+        },
+        ai: {
+          command: 'select --mode ai',
+          rows: [['FOCUS', 'make one person more capable'], ['TOOLS', 'research / prototypes / workflows'], ['NEXT', 'use AI well, not just because it is popular']]
+        },
+        security: {
+          command: 'select --mode security',
+          rows: [['FOCUS', 'understand how systems behave'], ['TOOLS', 'curiosity / testing / fundamentals'], ['NEXT', 'build with stronger defaults']]
+        },
+        creator: {
+          command: 'select --mode creator',
+          rows: [['FOCUS', 'ideas worth keeping'], ['TOOLS', 'scripts / stories / visual thinking'], ['NEXT', 'leave someone with a perspective']]
+        }
+      };
+
+      function renderMode(mode) {
+        const selected = modes[mode] || modes.web;
+        command.textContent = selected.command;
+        output.replaceChildren(...selected.rows.map(([key, value]) => {
+          const row = document.createElement('p');
+          const label = document.createElement('span');
+          label.className = 'console-key';
+          label.textContent = key;
+          row.append(label, ` ${value}`);
+          return row;
+        }));
+        buttons.forEach((button) => {
+          const isActive = button.dataset.mode === mode;
+          button.classList.toggle('is-active', isActive);
+          button.setAttribute('aria-selected', String(isActive));
+        });
+      }
+
+      buttons.forEach((button) => button.addEventListener('click', () => renderMode(button.dataset.mode)));
     }());
 
     (function setupReveal() {
