@@ -192,8 +192,8 @@
     document.body.classList.add('intro');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const backgroundVideo = document.querySelector('.video-bg');
-    if (backgroundVideo && !reduceMotion.matches) backgroundVideo.play().catch(() => {});
-    window.setTimeout(() => document.body.classList.remove('intro'), reduceMotion.matches ? 80 : 1600);
+    if (backgroundVideo && !reduceMotion.matches && window.innerWidth > 520) backgroundVideo.play().catch(() => {});
+    window.setTimeout(() => document.body.classList.remove('intro'), reduceMotion.matches ? 80 : 1200);
 
     (function setupCodeRain() {
       const canvas = document.getElementById('code-rain');
@@ -203,46 +203,74 @@
       let height = 0;
       let columns = 0;
       let drops = [];
+      let animationFrame = 0;
+      let lastFrame = 0;
+      let running = false;
       const fontSize = 16;
+      let columnSize = fontSize;
       const chars = 'アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const frameInterval = window.innerWidth <= 520 ? 1000 / 24 : 1000 / 30;
 
       function resize() {
         const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
         width = window.innerWidth;
         height = window.innerHeight;
+        columnSize = width <= 520 ? 20 : fontSize;
         canvas.width = Math.floor(width * ratio);
         canvas.height = Math.floor(height * ratio);
         canvas.style.width = `${width}px`;
         canvas.style.height = `${height}px`;
         ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-        columns = Math.ceil(width / fontSize);
+        columns = Math.ceil(width / columnSize);
         drops = Array.from({ length: columns }, () => Math.random() * (height / fontSize));
         ctx.font = `${fontSize}px DM Mono, monospace`;
       }
 
-      function draw() {
-        if (document.body.dataset.paused === 'true') {
-          window.requestAnimationFrame(draw);
+      function draw(timestamp) {
+        if (!running) return;
+        if (timestamp - lastFrame < frameInterval) {
+          animationFrame = window.requestAnimationFrame(draw);
           return;
         }
+        lastFrame = timestamp;
         ctx.fillStyle = 'rgba(4, 9, 7, 0.12)';
         ctx.fillRect(0, 0, width, height);
         for (let i = 0; i < columns; i += 1) {
           const char = chars[Math.floor(Math.random() * chars.length)];
-          const x = i * fontSize;
+          const x = i * columnSize;
           const y = drops[i] * fontSize;
           const accent = i % 23 === 0;
           ctx.fillStyle = accent ? 'rgba(255, 109, 125, 0.65)' : 'rgba(116, 255, 179, 0.52)';
           ctx.fillText(char, x, y);
           if (y > height && Math.random() > 0.975) drops[i] = 0;
-          else drops[i] += 1;
+          else drops[i] += width <= 520 ? 0.78 : 1;
         }
-        window.requestAnimationFrame(draw);
+        animationFrame = window.requestAnimationFrame(draw);
+      }
+
+      function start() {
+        if (running) return;
+        running = true;
+        lastFrame = 0;
+        animationFrame = window.requestAnimationFrame(draw);
+      }
+
+      function stop() {
+        running = false;
+        window.cancelAnimationFrame(animationFrame);
       }
 
       resize();
-      window.addEventListener('resize', resize, { passive: true });
-      window.requestAnimationFrame(draw);
+      let resizeFrame = 0;
+      window.addEventListener('resize', () => {
+        window.cancelAnimationFrame(resizeFrame);
+        resizeFrame = window.requestAnimationFrame(resize);
+      }, { passive: true });
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stop();
+        else start();
+      });
+      if (!document.hidden) start();
     }());
 
     (function setupReveal() {
@@ -265,8 +293,11 @@
       const links = Array.from(document.querySelectorAll('.category-link'));
       const sections = Array.from(document.querySelectorAll('[data-category]'));
       if (!links.length || !sections.length) return;
+      let activeId = 'top';
 
       function setActive(id, center = false) {
+        if (!id || (id === activeId && !center)) return;
+        activeId = id;
         links.forEach((link) => {
           const active = link.dataset.target === id;
           link.classList.toggle('is-active', active);
@@ -281,7 +312,7 @@
       const observer = new IntersectionObserver((entries) => {
         const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
         if (visible[0]) setActive(visible[0].target.id);
-      }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, 0.12, 0.4] });
+      }, { rootMargin: '-20% 0px -64% 0px', threshold: [0, 0.18, 0.45] });
       sections.forEach((section) => observer.observe(section));
     }());
 
@@ -296,10 +327,6 @@
       link.appendChild(ripple);
       window.setTimeout(() => ripple.remove(), 650);
     }, { passive: true });
-
-    document.addEventListener('visibilitychange', () => {
-      document.body.dataset.paused = String(document.hidden);
-    });
 
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
