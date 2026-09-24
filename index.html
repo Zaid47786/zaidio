@@ -11,6 +11,10 @@
   <meta property="og:description" content="A student developer and curious builder exploring web products, AI, cybersecurity, and meaningful content.">
   <meta property="og:image" content="ME.webp">
   <title>Zaid Ahmad — Student Developer &amp; Builder</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -139,10 +143,19 @@
         <p class="eyebrow"><span>04</span> ideas becoming products</p>
         <h2 id="product-title">Build for people,<br><em>not feature lists.</em></h2>
       </div>
+      <div class="project-toolbar">
+        <div class="project-filters" role="group" aria-label="Project categories">
+          <button class="project-filter is-active" type="button" data-filter="all" aria-pressed="true">ALL <span>03</span></button>
+          <button class="project-filter" type="button" data-filter="web" aria-pressed="false">WEB <span>02</span></button>
+          <button class="project-filter" type="button" data-filter="education" aria-pressed="false">EDUCATION <span>01</span></button>
+          <button class="project-filter" type="button" data-filter="local" aria-pressed="false">LOCAL BUSINESS <span>01</span></button>
+        </div>
+        <p class="project-filter-status" aria-live="polite">Showing <strong>03</strong> projects</p>
+      </div>
       <div class="product-grid">
-        <article class="product-card product-card-wide"><span class="product-index">A / 01</span><h3>Library management platform</h3><p>A system designed around study libraries: attendance, QR-based identification, seat management, fees, notifications, and an owner dashboard.</p><span class="product-status">CONCEPT / PRODUCT SYSTEM</span></article>
-        <article class="product-card"><span class="product-index">B / 02</span><h3>School portals</h3><p>Digital systems that bring information, communication, and everyday school workflows into one clearer place.</p><span class="product-status">EXPLORING</span></article>
-        <article class="product-card"><span class="product-index">C / 03</span><h3>Smart café ordering</h3><p>Simple ordering experiences that reduce friction for customers and make operations easier for local businesses.</p><span class="product-status">EXPLORING</span></article>
+        <article class="product-card product-card-wide" data-project="web education"><span class="product-index">A / 01</span><h3>Library management platform</h3><p>A system designed around study libraries: attendance, QR-based identification, seat management, fees, notifications, and an owner dashboard.</p><span class="product-status">CONCEPT / PRODUCT SYSTEM</span></article>
+        <article class="product-card" data-project="web education"><span class="product-index">B / 02</span><h3>School portals</h3><p>Digital systems that bring information, communication, and everyday school workflows into one clearer place.</p><span class="product-status">EXPLORING</span></article>
+        <article class="product-card" data-project="local"><span class="product-index">C / 03</span><h3>Smart café ordering</h3><p>Simple ordering experiences that reduce friction for customers and make operations easier for local businesses.</p><span class="product-status">EXPLORING</span></article>
       </div>
       <p class="product-note"><span aria-hidden="true">↳</span> The goal is not to add the most features. It is to understand what people actually need.</p>
     </section>
@@ -316,6 +329,32 @@
         if (visible[0]) setActive(visible[0].target.id);
       }, { rootMargin: '-20% 0px -64% 0px', threshold: [0, 0.18, 0.45] });
       sections.forEach((section) => observer.observe(section));
+    }());
+
+    (function setupProjectFilters() {
+      const filters = Array.from(document.querySelectorAll('.project-filter'));
+      const cards = Array.from(document.querySelectorAll('[data-project]'));
+      const status = document.querySelector('.project-filter-status strong');
+      if (!filters.length || !cards.length || !status) return;
+
+      function applyFilter(filter) {
+        let visible = 0;
+        cards.forEach((card) => {
+          const matches = filter === 'all' || card.dataset.project.split(' ').includes(filter);
+          card.hidden = !matches;
+          card.classList.toggle('is-filtered', matches);
+          if (matches) visible += 1;
+        });
+        filters.forEach((button) => {
+          const active = button.dataset.filter === filter;
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        status.textContent = String(visible).padStart(2, '0');
+      }
+
+      filters.forEach((button) => button.addEventListener('click', () => applyFilter(button.dataset.filter)));
+      applyFilter('all');
     }());
 
     document.addEventListener('click', (event) => {

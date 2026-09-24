@@ -172,6 +172,19 @@ blockquote { margin: 0; padding: 22px 0 22px 25px; border-left: 2px solid var(--
 .product-status { color: var(--muted); font-size: 0.56rem; letter-spacing: 0.08em; }
 .product-note { margin: 18px 0 0; color: var(--muted); font: 0.7rem var(--mono); }
 .product-note span { margin-right: 5px; color: var(--red); }
+.project-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: -17px 0 18px; }
+.project-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.project-filter { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); color: var(--muted); background: transparent; cursor: pointer; font: 0.58rem var(--mono); letter-spacing: 0.08em; transition: color var(--motion-fast) var(--ease-out), background var(--motion-base) var(--ease-smooth), border-color var(--motion-base) var(--ease-smooth), transform var(--motion-fast) var(--ease-out); }
+.project-filter span { color: var(--green); font-size: 0.52rem; }
+.project-filter:hover { border-color: var(--green); color: var(--ink); transform: translateY(-1px); }
+.project-filter:active { transform: scale(0.97); }
+.project-filter.is-active { border-color: var(--green); color: var(--bg); background: var(--green); }
+.project-filter.is-active span { color: var(--bg); }
+.project-filter-status { flex: 0 0 auto; margin: 0; color: var(--muted); font: 0.62rem var(--mono); letter-spacing: 0.05em; }
+.project-filter-status strong { color: var(--green); font-weight: 500; }
+.product-card[hidden] { display: none; }
+.product-card.is-filtered { animation: project-in 280ms var(--ease-out) both; }
+@keyframes project-in { from { opacity: 0.2; transform: translate3d(0, 8px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
 
 .creator-section { display: grid; grid-template-columns: 90px minmax(0, 720px); gap: 35px; align-items: start; padding: 128px 0; border-bottom: 1px solid var(--line); }
 .creator-mark { display: grid; width: 68px; height: 68px; place-items: center; border: 1px solid var(--green); color: var(--green); font-size: 1.5rem; box-shadow: 9px 9px 0 rgba(255, 109, 125, 0.2); }
@@ -227,6 +240,8 @@ blockquote { margin: 0; padding: 22px 0 22px 25px; border-left: 2px solid var(--
   .about-section, .content-section, .product-section { padding-top: 90px; }
   .section-heading { display: block; }
   .section-heading .eyebrow { margin-bottom: 27px; }
+  .project-toolbar { display: block; margin-top: -8px; }
+  .project-filter-status { margin-top: 12px; }
   .about-copy { grid-template-columns: 1fr; gap: 25px; }
   .focus-grid, .product-grid { grid-template-columns: 1fr; }
   .focus-card, .product-card { min-height: 0; }
@@ -246,6 +261,9 @@ blockquote { margin: 0; padding: 22px 0 22px 25px; border-left: 2px solid var(--
   .brand-copy small { display: none; }
   .category-nav { top: 7px; margin-bottom: 17px; padding: 5px; border-radius: 10px; }
   .category-link { padding: 8px 9px; font-size: 0.55rem; }
+  .project-filters { flex-wrap: nowrap; max-width: 100%; overflow-x: auto; padding-bottom: 3px; scrollbar-width: none; }
+  .project-filters::-webkit-scrollbar { display: none; }
+  .project-filter { flex: 0 0 auto; }
   h1 { font-size: clamp(3.2rem, 17vw, 5rem); }
   h2 { font-size: clamp(2.6rem, 13vw, 4rem); }
   .hero-intro { font-size: 0.96rem; }
