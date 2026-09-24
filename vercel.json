@@ -1,6 +1,12 @@
 {
   "headers": [
     {
+      "source": "/ME-320.webp",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
       "source": "/ME.webp",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
