@@ -54,10 +54,6 @@ body::after {
   background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.26) 0, rgba(0, 0, 0, 0.26) 1px, transparent 1px, transparent 4px);
   mix-blend-mode: overlay;
 }
-body.intro .site-shell { opacity: 0; visibility: hidden; transform: translateY(12px); }
-body.intro .video-bg { opacity: 0; }
-body.intro::before, body.intro::after { opacity: 0; }
-
 .skip-link {
   position: fixed;
   top: 12px;

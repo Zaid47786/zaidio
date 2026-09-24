@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#07100d">
   <meta property="og:title" content="Zaid Ahmad — Student Developer &amp; Builder">
   <meta property="og:description" content="A student developer and curious builder exploring web products, AI, cybersecurity, and meaningful content.">
-  <meta property="og:image" content="ME.png.jpg">
+  <meta property="og:image" content="ME.webp">
   <title>Zaid Ahmad — Student Developer &amp; Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <video class="video-bg" muted loop playsinline preload="metadata" poster="back.jpg" aria-hidden="true">
+  <video class="video-bg" muted loop playsinline preload="none" poster="back.webp" aria-hidden="true">
     <source src="vid.mp4" type="video/mp4">
   </video>
   <canvas id="code-rain" class="code-rain" aria-hidden="true"></canvas>
@@ -69,7 +69,7 @@
 
       <div class="portrait-card">
         <div class="portrait-frame">
-          <img src="ME.png.jpg" alt="Portrait of Zaid Ahmad" class="profile-img" width="640" height="640">
+          <img src="ME.webp" alt="Portrait of Zaid Ahmad" class="profile-img" width="640" height="640" fetchpriority="high" decoding="async">
           <span class="portrait-corner corner-tl" aria-hidden="true"></span>
           <span class="portrait-corner corner-br" aria-hidden="true"></span>
         </div>
@@ -189,11 +189,16 @@
   </main>
 
   <script>
-    document.body.classList.add('intro');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const backgroundVideo = document.querySelector('.video-bg');
-    if (backgroundVideo && !reduceMotion.matches && window.innerWidth > 520) backgroundVideo.play().catch(() => {});
-    window.setTimeout(() => document.body.classList.remove('intro'), reduceMotion.matches ? 80 : 1200);
+    if (backgroundVideo && !reduceMotion.matches && window.innerWidth > 760) {
+      const startVideo = () => {
+        backgroundVideo.load();
+        backgroundVideo.play().catch(() => {});
+      };
+      if ('requestIdleCallback' in window) window.requestIdleCallback(startVideo, { timeout: 1800 });
+      else window.setTimeout(startVideo, 1400);
+    }
 
     (function setupCodeRain() {
       const canvas = document.getElementById('code-rain');
